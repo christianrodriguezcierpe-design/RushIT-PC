@@ -1,56 +1,80 @@
-import { Monitor, Phone, Mail, MapPin, Clock } from "lucide-react";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 
-const Footer = () => (
-  <footer className="border-t bg-card py-12">
-    <div className="container">
-      <div className="grid gap-8 md:grid-cols-4">
-        {/* Brand */}
-        <div>
-          <a href="#" className="mb-3 flex items-center gap-2 font-display text-xl font-bold text-foreground">
-            <Monitor className="h-6 w-6 text-primary" /> ByteFix Pro
-          </a>
-          <p className="text-sm text-muted-foreground">Expert PC assembly, repair, and maintenance. Your trusted local tech partner.</p>
+import { getSiteIcon } from "@/features/site/site-icons";
+import type { BusinessProfile, LinkItem } from "@/types/site";
+
+interface FooterProps {
+  business: BusinessProfile;
+  quickLinks: LinkItem[];
+}
+
+const Footer = ({ business, quickLinks }: FooterProps) => {
+  const LogoIcon = getSiteIcon(business.logoIcon);
+
+  return (
+    <footer className="border-t bg-card py-12">
+      <div className="container">
+        <div className="grid gap-8 md:grid-cols-4">
+          <div>
+            <a href="#" className="mb-3 flex items-center gap-2 font-display text-xl font-bold text-foreground">
+              <LogoIcon className="h-6 w-6 text-primary" /> {business.name}
+            </a>
+            <p className="text-sm text-muted-foreground">{business.tagline}</p>
+          </div>
+
+          <div>
+            <h4 className="mb-3 font-display text-sm font-bold text-foreground">Contact</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li className="flex items-center gap-2">
+                <Phone className="h-4 w-4" />
+                <a href={business.phoneHref} className="transition-colors hover:text-foreground">
+                  {business.phoneLabel}
+                </a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Mail className="h-4 w-4" />
+                <a href={`mailto:${business.email}`} className="transition-colors hover:text-foreground">
+                  {business.email}
+                </a>
+              </li>
+              <li className="flex items-start gap-2">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0" /> {business.addressLines.join(", ")}
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="mb-3 font-display text-sm font-bold text-foreground">Hours</h4>
+            <ul className="space-y-1 text-sm text-muted-foreground">
+              {business.hours.map((hour, index) => (
+                <li key={hour.label} className={hour.highlight ? "mt-2 text-xs font-semibold text-accent" : index === 0 ? "flex items-center gap-2" : "pl-6"}>
+                  {index === 0 && !hour.highlight ? <Clock className="h-4 w-4" /> : null}
+                  {hour.label}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="mb-3 font-display text-sm font-bold text-foreground">Quick Links</h4>
+            <ul className="space-y-1 text-sm text-muted-foreground">
+              {quickLinks.map((link) => (
+                <li key={link.href}>
+                  <a href={link.href} className="transition-colors hover:text-foreground">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
-        {/* Contact */}
-        <div>
-          <h4 className="mb-3 font-display text-sm font-bold text-foreground">Contact</h4>
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li className="flex items-center gap-2"><Phone className="h-4 w-4" /> (555) 123-4567</li>
-            <li className="flex items-center gap-2"><Mail className="h-4 w-4" /> hello@bytefixpro.com</li>
-            <li className="flex items-start gap-2"><MapPin className="mt-0.5 h-4 w-4 shrink-0" /> 123 Tech Street, Suite 100, Metro City, ST 12345</li>
-          </ul>
-        </div>
-
-        {/* Hours */}
-        <div>
-          <h4 className="mb-3 font-display text-sm font-bold text-foreground">Hours</h4>
-          <ul className="space-y-1 text-sm text-muted-foreground">
-            <li className="flex items-center gap-2"><Clock className="h-4 w-4" /> Mon–Fri: 9am – 7pm</li>
-            <li className="pl-6">Sat: 10am – 5pm</li>
-            <li className="pl-6">Sun: Closed</li>
-            <li className="mt-2 text-xs text-accent font-semibold">Emergency service available 24/7</li>
-          </ul>
-        </div>
-
-        {/* Quick Links */}
-        <div>
-          <h4 className="mb-3 font-display text-sm font-bold text-foreground">Quick Links</h4>
-          <ul className="space-y-1 text-sm text-muted-foreground">
-            <li><a href="#services" className="hover:text-foreground transition-colors">Services</a></li>
-            <li><a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a></li>
-            <li><a href="#reviews" className="hover:text-foreground transition-colors">Reviews</a></li>
-            <li><a href="#faq" className="hover:text-foreground transition-colors">FAQ</a></li>
-            <li><a href="#booking" className="hover:text-foreground transition-colors">Book Now</a></li>
-          </ul>
+        <div className="mt-10 border-t pt-6 text-center text-xs text-muted-foreground">
+          Copyright {new Date().getFullYear()} {business.name}. All rights reserved.
         </div>
       </div>
-
-      <div className="mt-10 border-t pt-6 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} ByteFix Pro. All rights reserved.
-      </div>
-    </div>
-  </footer>
-);
+    </footer>
+  );
+};
 
 export default Footer;

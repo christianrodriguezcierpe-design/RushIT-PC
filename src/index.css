@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,6 +6,8 @@
 
 @layer base {
   :root {
+    --font-display: "Space Grotesk";
+    --font-body: "Inter";
     --background: 220 20% 97%;
     --foreground: 220 30% 10%;
 
@@ -37,6 +39,8 @@
     --radius: 0.75rem;
 
     --hero-gradient: linear-gradient(135deg, hsl(220 35% 12%) 0%, hsl(220 40% 20%) 50%, hsl(220 50% 28%) 100%);
+    --page-background: radial-gradient(circle at top, hsl(220 60% 96%) 0%, hsl(220 20% 97%) 42%, hsl(220 18% 95%) 100%);
+    --text-gradient: linear-gradient(135deg, hsl(220 70% 55%), hsl(38 95% 55%));
     --glow: 220 70% 50%;
 
     --sidebar-background: 0 0% 98%;
@@ -78,6 +82,60 @@
     --input: 220 20% 18%;
     --ring: 220 70% 55%;
   }
+
+  :root[data-site-theme="bytefix-pro"] {
+    --font-display: "Space Grotesk";
+    --font-body: "Inter";
+    --background: 220 20% 97%;
+    --foreground: 220 30% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 30% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 30% 10%;
+    --primary: 220 70% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 15% 90%;
+    --secondary-foreground: 220 30% 15%;
+    --muted: 220 15% 93%;
+    --muted-foreground: 220 10% 45%;
+    --accent: 38 95% 55%;
+    --accent-foreground: 220 30% 10%;
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 220 70% 50%;
+    --radius: 0.75rem;
+    --hero-gradient: linear-gradient(135deg, hsl(220 35% 12%) 0%, hsl(220 40% 20%) 50%, hsl(220 50% 28%) 100%);
+    --page-background: radial-gradient(circle at top, hsl(220 60% 96%) 0%, hsl(220 20% 97%) 42%, hsl(220 18% 95%) 100%);
+    --text-gradient: linear-gradient(135deg, hsl(220 70% 55%), hsl(38 95% 55%));
+    --glow: 220 70% 50%;
+  }
+
+  :root[data-site-theme="civic-ledger"] {
+    --font-display: "Fraunces";
+    --font-body: "Manrope";
+    --background: 40 20% 98%;
+    --foreground: 214 32% 16%;
+    --card: 0 0% 100%;
+    --card-foreground: 214 32% 16%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 214 32% 16%;
+    --primary: 206 46% 34%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 32 26% 92%;
+    --secondary-foreground: 214 24% 20%;
+    --muted: 38 28% 94%;
+    --muted-foreground: 215 16% 40%;
+    --accent: 24 78% 56%;
+    --accent-foreground: 0 0% 100%;
+    --border: 34 20% 86%;
+    --input: 34 20% 86%;
+    --ring: 206 46% 34%;
+    --radius: 0.55rem;
+    --hero-gradient: linear-gradient(135deg, hsl(213 33% 19%) 0%, hsl(208 35% 28%) 45%, hsl(204 42% 36%) 100%);
+    --page-background: linear-gradient(180deg, hsl(35 40% 97%) 0%, hsl(38 28% 95%) 100%);
+    --text-gradient: linear-gradient(135deg, hsl(206 46% 34%), hsl(24 78% 56%));
+    --glow: 24 78% 56%;
+  }
 }
 
 @layer base {
@@ -97,7 +155,7 @@
 @layer utilities {
   .text-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(220 70% 55%), hsl(38 95% 55%));
+    background-image: var(--text-gradient);
   }
 }
 

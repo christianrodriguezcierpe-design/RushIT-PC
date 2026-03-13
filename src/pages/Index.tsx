@@ -1,43 +1,43 @@
-import EmergencyBanner from "@/components/landing/EmergencyBanner";
-import Navbar from "@/components/landing/Navbar";
-import HeroSection from "@/components/landing/HeroSection";
-import TrustBar from "@/components/landing/TrustBar";
-import ServicesGrid from "@/components/landing/ServicesGrid";
-import PricingTable from "@/components/landing/PricingTable";
-import HowItWorks from "@/components/landing/HowItWorks";
-import BeforeAfterGallery from "@/components/landing/BeforeAfterGallery";
-import ReviewsSection from "@/components/landing/ReviewsSection";
-import CaseStudies from "@/components/landing/CaseStudies";
-import TeamSection from "@/components/landing/TeamSection";
-import LeadMagnet from "@/components/landing/LeadMagnet";
-import ServiceArea from "@/components/landing/ServiceArea";
-import FAQSection from "@/components/landing/FAQSection";
-import BookingSection from "@/components/landing/BookingSection";
-import BlogSection from "@/components/landing/BlogSection";
-import Footer from "@/components/landing/Footer";
+import { Fragment } from "react";
 
-const Index = () => (
-  <div className="min-h-screen bg-background">
-    <EmergencyBanner />
-    <Navbar />
-    <main>
-      <HeroSection />
-      <TrustBar />
-      <ServicesGrid />
-      <PricingTable />
-      <HowItWorks />
-      <BeforeAfterGallery />
-      <ReviewsSection />
-      <CaseStudies />
-      <TeamSection />
-      <LeadMagnet />
-      <ServiceArea />
-      <FAQSection />
-      <BookingSection />
-      <BlogSection />
-    </main>
-    <Footer />
-  </div>
-);
+import { renderFixedSection, renderManagedSection } from "@/features/site/section-registry";
+import { getEnabledManagedSections, getFixedSectionConfig } from "@/features/site/site-runtime";
+import { useSiteDefinition } from "@/features/site/use-site-definition";
+
+const Index = () => {
+  const { data: site, isLoading, isError } = useSiteDefinition();
+
+  if (isLoading || !site) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background px-6 text-center">
+        <p className="max-w-md text-sm text-muted-foreground">Loading the site experience...</p>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background px-6 text-center">
+        <p className="max-w-md text-sm text-muted-foreground">The site configuration could not be loaded.</p>
+      </div>
+    );
+  }
+
+  const managedSections = getEnabledManagedSections(site);
+
+  return (
+    <div className="min-h-screen bg-background" style={{ background: "var(--page-background)" }}>
+      {getFixedSectionConfig(site, "emergencyBanner") ? renderFixedSection(site, "emergencyBanner") : null}
+      {getFixedSectionConfig(site, "navbar") ? renderFixedSection(site, "navbar") : null}
+      {getFixedSectionConfig(site, "hero") ? renderFixedSection(site, "hero") : null}
+      <main>
+        {managedSections.map((section) => (
+          <Fragment key={section.key}>{renderManagedSection(site, section.key)}</Fragment>
+        ))}
+      </main>
+      {getFixedSectionConfig(site, "footer") ? renderFixedSection(site, "footer") : null}
+    </div>
+  );
+};
 
 export default Index;
