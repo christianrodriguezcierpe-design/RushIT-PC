@@ -91,12 +91,40 @@ If the repository is still connected to Lovable, pushed changes will also be ref
 - `npm run build` creates a production build.
 - `npm run build:dev` creates a development-mode build.
 - `npm run lint` runs ESLint.
+- `npm run deployment:bootstrap` rewrites deployment-facing docs and metadata in a copied client workspace so it stops looking like the base product repo.
 - `npm run site:apply-preset` upserts the current preset into the configured Supabase project using the service role key.
 - `npm run site:preflight` runs a read-only deployment readiness check against the configured Supabase project and local env values.
 - `npm run site:sweep-media` removes orphaned gallery media objects from the configured Supabase `site-media` bucket. Add `-- --dry-run` to preview removals.
 - `npm run test` runs the Vitest suite once.
 - `npm run test:watch` runs Vitest in watch mode.
 - `npm run preview` serves the built app locally.
+
+## Deployment bootstrap
+
+After creating or copying a deployment workspace and repointing its `origin`, run the bootstrap command against that deployment repo to replace copied base-product docs/state with deployment-specific files.
+
+Example:
+
+```sh
+npm run deployment:bootstrap -- \
+  --target-dir ../RushIT-PC \
+  --deployment-name RushIT-PC \
+  --business-name "RushIT PC" \
+  --repo-url https://github.com/christianrodriguezcierpe-design/RushIT-PC.git \
+  --package-tier base \
+  --theme-preset bytefix-pro \
+  --notification-provider postmark \
+  --add-on pricing
+```
+
+The command writes:
+
+- `README.md`
+- `DECISIONS.md`
+- `SESSION_STATE.md`
+- `deployment.config.json`
+
+It also normalizes the deployment package name in `package.json` and `package-lock.json`, and refuses to run against the base product workspace.
 
 ## Supabase setup flow
 

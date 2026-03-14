@@ -9,6 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
+    "deployment:bootstrap": "tsx scripts/bootstrap-deployment.ts",
     "site:apply-preset": "tsx scripts/apply-site-preset.ts",
     "site:preflight": "tsx scripts/site-preflight.ts",
     "site:sweep-media": "tsx scripts/sweep-site-media.ts",

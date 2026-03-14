@@ -1,17 +1,17 @@
 # Session State
 
 ## Current Objective
-Publish the updated base product baseline to GitHub after landing the reusable SMTP fallback and controlled theme-preset layer, then use that baseline to create separate RushIT deployment repos.
+Keep the base product ready for repeated client instantiation while moving the first real deployment effort into `RushIT-PC`.
 
 ## Last Completed
-Implemented provider-aware notifications in the base product with `postmark` or `smtp` selected through deployment config, added the SMTP migration and preflight validation path, and added a controlled theme-preset layer driven by `packageConfig.themePreset`.
+Added a reusable `deployment:bootstrap` command to normalize copied deployment workspaces, then used it to rewrite the copied base-product docs and metadata in the `RushIT-PC` workspace.
 
 ## Next Actions
-- Review the updated base-product workspace state for commit readiness.
-- Commit the base-product baseline changes on `chore/local-workflow-setup`.
-- Push the branch to the base GitHub repo and merge it into `main`.
-- Create `RushIT-PC` and `RushIT-Software` as separate GitHub repos derived from the merged base-product baseline.
-- Clone each deployment repo into its own local workspace before applying RushIT-specific presets/content.
+- Commit and push the deployment-bootstrap changes in the base product repo.
+- Commit and push the normalized deployment-state files in `RushIT-PC`.
+- Move active implementation into the `RushIT-PC` workspace.
+- Replace the base seed content/preset with RushIT PC content and pricing.
+- Connect the first real Supabase project for `RushIT-PC` and run apply/preflight/validation.
 
 ## Open Blockers/Risks
 - `npm audit` still reports 11 vulnerabilities, but they are currently in dev/build/test tooling (`vite`, `rollup`, `esbuild`, `jsdom`, and related transitives) rather than the runtime app path.
@@ -23,5 +23,6 @@ Implemented provider-aware notifications in the base product with `postmark` or 
 
 ## Notes
 - Remote: `https://github.com/christianrodriguezcierpe-design/Dynamic-LndngPg-AdminDashboard-BookingSystem-CnfgLyr.git`
-- Default branch at clone time: `main`
-- Current working branch: `chore/local-workflow-setup`
+- Default branch: `main`
+- `RushIT-PC` local workspace: `D:\Desktop\Bussiness\CODEX CLI Projects\RushIT-PC`
+- `RushIT-Software` local workspace exists but remains deferred until after `RushIT-PC` validation.

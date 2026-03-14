@@ -79,3 +79,8 @@
 - Context: Different client deployments need visibly different public-site styling, but free-form design controls would blur the product boundary and create support overhead.
 - Decision: Keep visual choice in deployment config through `packageConfig.themePreset`, and map that preset to controlled CSS-variable theme definitions for colors, typography, gradients, radius, and overall tone instead of exposing runtime styling controls.
 - Consequences: New deployments can choose a visual direction like tech-forward or professional without code surgery, the base product remains reusable, and client-facing admin stays focused on business content rather than product styling internals.
+
+## 2026-03-13 - Add a deployment bootstrap command to normalize copied client workspaces
+- Context: New deployment repos start as copies of the base product, which means they initially inherit product-development docs and session files that do not belong to a client deployment.
+- Decision: Add a `deployment:bootstrap` command that rewrites `README.md`, `DECISIONS.md`, `SESSION_STATE.md`, and `deployment.config.json` for a deployment workspace, updates the package name, and refuses to run against the base product repo itself.
+- Consequences: New client repos can be normalized quickly after creation, deployment docs stay instance-specific, and future deployment setup becomes less error-prone than manual cleanup.
