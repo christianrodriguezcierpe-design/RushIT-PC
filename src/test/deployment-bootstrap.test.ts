@@ -10,9 +10,9 @@ import {
 
 describe("deployment bootstrap helpers", () => {
   const metadata = buildDeploymentBootstrapMetadata({
-    deploymentName: "RushIT-PC",
-    businessName: "RushIT PC",
-    repoUrl: "https://github.com/example/RushIT-PC.git",
+    deploymentName: "harbor-service-co",
+    businessName: "Harbor Service Co.",
+    repoUrl: "https://github.com/example/harbor-service-co.git",
     baseProductRepoUrl: "https://github.com/example/base-product.git",
     packageTier: "base",
     enabledAddOns: ["pricing"],
@@ -22,18 +22,18 @@ describe("deployment bootstrap helpers", () => {
   });
 
   it("normalizes repo urls for safe comparisons", () => {
-    expect(normalizeRepoUrl("https://github.com/example/RushIT-PC.git")).toBe(
-      "https://github.com/example/rushit-pc",
+    expect(normalizeRepoUrl("https://github.com/example/harbor-service-co.git")).toBe(
+      "https://github.com/example/harbor-service-co",
     );
-    expect(normalizeRepoUrl("https://github.com/example/RushIT-PC/")).toBe(
-      "https://github.com/example/rushit-pc",
+    expect(normalizeRepoUrl("https://github.com/example/harbor-service-co/")).toBe(
+      "https://github.com/example/harbor-service-co",
     );
   });
 
   it("builds deployment metadata with the requested profile", () => {
     expect(metadata).toMatchObject({
-      deploymentName: "RushIT-PC",
-      businessName: "RushIT PC",
+      deploymentName: "harbor-service-co",
+      businessName: "Harbor Service Co.",
       packageTier: "base",
       enabledAddOns: ["pricing"],
       themePreset: "bytefix-pro",
@@ -45,7 +45,7 @@ describe("deployment bootstrap helpers", () => {
   it("generates deployment README content", () => {
     const readme = buildDeploymentReadme(metadata);
 
-    expect(readme).toContain("# RushIT PC");
+    expect(readme).toContain("# Harbor Service Co.");
     expect(readme).toContain("`pricing`");
     expect(readme).toContain("`bytefix-pro`");
   });
@@ -55,7 +55,7 @@ describe("deployment bootstrap helpers", () => {
     const sessionState = buildDeploymentSessionState(metadata);
 
     expect(decisions).toContain("Initial deployment profile");
-    expect(sessionState).toContain("Customize and validate the RushIT PC deployment");
+    expect(sessionState).toContain("Customize and validate the Harbor Service Co. deployment");
     expect(sessionState).toContain("Notification provider: `postmark`");
   });
 });

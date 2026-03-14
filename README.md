@@ -1,41 +1,42 @@
-# Dynamic-LndngPg-AdminDashboard-BookingSystem-CnfgLyr
+# Dynamic Service Business Base
 
-Frontend application scaffold managed in GitHub and editable locally or through Lovable. The repository currently uses Vite, React, TypeScript, shadcn-ui, and Tailwind CSS.
+Reusable base product for service-business deployments. The repo bundles:
 
-## Current foundation
+- a dynamic landing page driven by a typed site-definition model
+- a business-admin dashboard for content and booking workflow management
+- a Supabase-backed appointment and notification workflow
+- deployment scripts for seeding, preflight validation, media cleanup, and repo bootstrap
 
-The landing page now renders from a shared site-definition layer instead of section-local hardcoded arrays and copy.
+This base repo is standalone. It is not tied to any builder platform.
 
-- Seeded content and package/config defaults live in `src/data/siteSeed.ts`.
-- Typed site/content/config models live in `src/types/site.ts`.
-- Section ordering and rendering are resolved through `src/features/site`.
-- Supabase browser-client scaffolding lives in `src/integrations/supabase`.
-- Supabase SQL schema lives in `supabase/migrations`.
-- Internal preset apply tooling lives in `scripts/apply-site-preset.ts`.
-- Appointment workflow logic lives in `src/features/appointments`.
-- Admin auth/session shell lives in `src/features/auth` and `src/pages/admin`.
+## Core Architecture
 
-The pre-validation release-blocker dependency pass is partially complete:
+- `src/types/site.ts`: shared content, package, admin, and section models
+- `src/data/siteSeed.ts`: generic fallback seed used when Supabase and local content are absent
+- `src/features/site`: site-definition loading, hydration, persistence, and runtime filtering
+- `src/features/appointments`: booking requests, notes, status updates, and workflow queries
+- `src/features/auth`: admin session handling and route protection
+- `src/features/notifications`: browser-side Edge Function invocation
+- `src/features/deployment`: deployment bootstrap and read-only preflight helpers
+- `src/features/media`: before/after gallery upload and cleanup helpers
+- `src/components/landing`: public-site sections
+- `src/components/admin`: admin editors constrained by package/add-on rules
+- `supabase/migrations`: schema, policies, triggers, and storage setup
+- `supabase/functions/process-appointment-notifications`: provider-aware notification delivery
 
-- `react-router-dom` is patched to `6.30.3` to clear the production routing/open-redirect audit finding.
-- `lodash` is forced to `4.17.23` through `overrides` so the runtime dependency pulled by `recharts` no longer carries the reported prototype-pollution issue.
-- The remaining `npm audit` findings are currently in dev/build/test tooling (`vite`, `rollup`, `esbuild`, `jsdom`, and related transitive packages) and are being deferred until after the first real client validation.
+## Runtime Model
 
-The app now attempts to load the site definition from Supabase tables first and falls back to the in-repo seed definition when env values or database rows are missing. The booking form now creates appointment requests, and `/admin` provides business-admin screens for request handling plus content editors for the business profile, services, pricing when enabled, before/after gallery when enabled, FAQs, reviews, team when enabled, case studies when enabled, and allowed section order.
+The app loads a single `SiteDefinition` and renders the public site from it.
 
-For V1, the footer is derived automatically from business profile data and active sections rather than managed through a separate footer editor.
+Load order:
 
-The base product also now supports:
+1. Supabase tables, when browser env is configured and seeded rows exist
+2. localStorage fallback for local development/demo mode
+3. the in-repo generic seed in `src/data/siteSeed.ts`
 
-- a provider-aware notifications add-on selected through deployment config as `postmark` or `smtp`
-- a controlled public-site theme layer selected through `packageConfig.themePreset`
+This keeps fallback behavior stable while allowing the same UI to operate before infrastructure is connected.
 
-## Repository
-
-- GitHub: `https://github.com/christianrodriguezcierpe-design/Dynamic-LndngPg-AdminDashboard-BookingSystem-CnfgLyr.git`
-- Default branch: `main`
-
-## Local development
+## Local Development
 
 Requirements:
 
@@ -51,7 +52,9 @@ npm install
 npm run dev
 ```
 
-To prepare Supabase env values for a client deployment:
+This repo uses `npm` as the canonical package manager.
+
+To prepare env values for a Supabase-backed deployment:
 
 ```sh
 cp .env.example .env
@@ -63,138 +66,77 @@ Fill in:
 - `VITE_SUPABASE_ANON_KEY`
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
-- provider-specific notification env when the notifications add-on is enabled:
+- provider-specific notification env when the `notifications` add-on is enabled:
   - Postmark: `POSTMARK_SERVER_TOKEN`, `POSTMARK_FROM_EMAIL`, optional `POSTMARK_FROM_NAME`
   - SMTP: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_FROM_EMAIL`, optional `SMTP_FROM_NAME`, optional `SMTP_SECURE`
 
-## Working on a branch
-
-Use feature or chore branches off `main` for local changes:
-
-```sh
-git switch main
-git pull
-git switch -c <branch-name>
-```
-
-Publish a branch when you are ready:
-
-```sh
-git push -u origin <branch-name>
-```
-
-If the repository is still connected to Lovable, pushed changes will also be reflected there.
-
 ## Scripts
 
-- `npm run dev` starts the Vite development server.
-- `npm run build` creates a production build.
-- `npm run build:dev` creates a development-mode build.
-- `npm run lint` runs ESLint.
-- `npm run deployment:bootstrap` rewrites deployment-facing docs and metadata in a copied client workspace so it stops looking like the base product repo.
-- `npm run site:apply-preset` upserts the current preset into the configured Supabase project using the service role key.
-- `npm run site:preflight` runs a read-only deployment readiness check against the configured Supabase project and local env values.
-- `npm run site:sweep-media` removes orphaned gallery media objects from the configured Supabase `site-media` bucket. Add `-- --dry-run` to preview removals.
-- `npm run test` runs the Vitest suite once.
-- `npm run test:watch` runs Vitest in watch mode.
-- `npm run preview` serves the built app locally.
+- `npm run dev`: start the Vite dev server
+- `npm run build`: create a production build
+- `npm run build:dev`: create a development-mode build
+- `npm run lint`: run ESLint
+- `npm run test`: run the Vitest suite once
+- `npm run test:watch`: run Vitest in watch mode
+- `npm run preview`: serve the built app locally
+- `npm run deployment:bootstrap`: rewrite copied deployment docs and metadata in a deployment workspace
+- `npm run site:apply-preset`: upsert the current preset into the configured Supabase project
+- `npm run site:preflight`: run a read-only deployment readiness check
+- `npm run site:sweep-media`: remove orphaned gallery media from the configured `site-media` bucket
 
-## Deployment bootstrap
+## Deployment Workflow
 
-After creating or copying a deployment workspace and repointing its `origin`, run the bootstrap command against that deployment repo to replace copied base-product docs/state with deployment-specific files.
+The canonical deployment procedure lives in `BASE_PRODUCT_DEPLOYMENT_MANUAL.md`.
 
-Example:
+Deployment-specific repos should not duplicate the full reusable process. They should keep only:
+
+- deployment-specific profile and assumptions
+- local UAT / validation notes
+- client-specific go / no-go state
+
+High-level flow:
+
+1. Copy or clone the base repo into a deployment workspace.
+2. Repoint the deployment repo `origin`.
+3. Run `npm run deployment:bootstrap` against that deployment workspace.
+4. Customize the fallback seed and any deployment-specific preset content.
+5. Create and configure the deployment Supabase project.
+6. Apply migrations and deploy the notification Edge Function.
+7. Run `npm run site:apply-preset`.
+8. Run `npm run site:preflight`.
+9. Validate the public site, admin login, booking flow, package-gated content, notifications, and media handling.
+
+Example bootstrap command:
 
 ```sh
 npm run deployment:bootstrap -- \
-  --target-dir ../RushIT-PC \
-  --deployment-name RushIT-PC \
-  --business-name "RushIT PC" \
-  --repo-url https://github.com/christianrodriguezcierpe-design/RushIT-PC.git \
+  --target-dir ../harbor-service-co \
+  --deployment-name harbor-service-co \
+  --business-name "Harbor Service Co." \
+  --repo-url https://github.com/example/harbor-service-co.git \
   --package-tier base \
-  --theme-preset bytefix-pro \
+  --theme-preset civic-ledger \
   --notification-provider postmark \
   --add-on pricing
 ```
 
-The command writes:
-
-- `README.md`
-- `DECISIONS.md`
-- `SESSION_STATE.md`
-- `deployment.config.json`
-
-It also normalizes the deployment package name in `package.json` and `package-lock.json`, and refuses to run against the base product workspace.
-
-## Supabase setup flow
-
-1. Apply the SQL in `supabase/migrations/20260311152000_site_foundation.sql` to the target client Supabase project.
-2. Apply the SQL in `supabase/migrations/20260311170000_appointment_workflow.sql`.
-3. Apply the SQL in `supabase/migrations/20260311184500_business_admin_content_updates.sql`.
-4. Apply the SQL in `supabase/migrations/20260311193000_notification_delivery_addon.sql`.
-5. Apply the SQL in `supabase/migrations/20260313103000_site_media_storage.sql` to provision the public `site-media` bucket and authenticated upload policies.
-6. Apply the SQL in `supabase/migrations/20260313121500_notification_provider_smtp.sql` to add notification-provider selection to deployment config and logs.
-7. Deploy the Supabase Edge Function in `supabase/functions/process-appointment-notifications`.
-8. Create the business admin user in Supabase Auth with email/password credentials.
-9. Set the browser and service-role env values.
-10. If the notifications add-on is enabled for that client, set the provider-specific notification env for the selected `notification_provider`.
-11. Run `npm run site:apply-preset` to upsert the current preset rows.
-12. Run `npm run site:preflight` to verify env values, tables, seeded rows, the `site-media` bucket, and add-on-dependent readiness checks before live validation.
-13. Start the app with `npm run dev`, verify the public site loads from Supabase-backed content, submit a booking request, then sign in at `/admin`.
-
-## Admin shell
+## Supabase Notes
 
 - Public booking requests are written to `appointment_requests`.
-- Notification log rows are queued automatically by database triggers when a request is submitted or when its status changes to accepted/rejected.
-- The minimal admin shell is available at `/admin`.
-- When Supabase auth is configured, admin login uses email/password through Supabase Auth.
-- When Supabase auth is not configured in local development, the admin shell falls back to a local demo mode so the UI can still be exercised.
-- The current content-management pass lets the business admin edit business profile data, services, FAQs, reviews, and the order of allowed managed sections.
-- Pricing editing is now available only when the pricing add-on is active for that deployment and `pricingTiers` remains allowed in the admin experience config.
-- Before/after gallery editing is now available only when the before/after add-on is active for that deployment and `beforeAfterItems` remains allowed in the admin experience config.
-- Before/after gallery uploads use one `before` image and one `after` image per item in V1, stored in expandable media objects for later growth.
-- Replacing or clearing unsaved gallery images now cleans up draft-only Supabase objects immediately, and saving the gallery removes previously saved assets that are no longer referenced.
-- Team editing is now available only when the team add-on is active for that deployment and `teamMembers` remains allowed in the admin experience config.
-- Case studies editing is now available only when the case-studies add-on is active for that deployment and `caseStudies` remains allowed in the admin experience config.
-- Footer contact details and hours are derived from the business profile, and footer quick links are derived from the active managed sections.
-- Package activation, locked section positions, and add-on enablement remain outside the client admin surface.
-- When Supabase storage is not configured, local mode stores uploaded gallery images as data URLs so the editor and landing page can still be exercised without a client project.
-- For abandoned uploads from interrupted sessions or failed saves, run `npm run site:sweep-media` against the client project with service-role env values to remove unreferenced gallery assets.
-- Public-site styling is selected through `packageConfig.themePreset`. The base product currently ships with:
-  - `bytefix-pro` for a modern tech-forward direction
-  - `civic-ledger` for a more professional service-business direction
+- Notification log rows are queued by database triggers when a request is created or reviewed.
+- The admin shell uses Supabase Auth email/password when auth env is configured.
+- When browser Supabase env is absent, the admin and booking workflow fall back to local mode.
+- When storage env is absent, gallery uploads fall back to data URLs so the editor can still be exercised locally.
 
-## Preflight behavior
+## Theme Presets
 
-- `site:preflight` is read-only. It does not create rows, buckets, or env values.
-- It verifies:
-  - browser Supabase env
-  - service-role Supabase env
-  - required core tables
-  - seeded site-definition rows
-  - `site-media` bucket readiness when the `beforeAfterGallery` add-on is enabled
-  - provider-specific notification env readiness when the `notifications` add-on is enabled
-  - the `process-appointment-notifications` Edge Function when the `notifications` add-on is enabled
-- If the `notifications` add-on is enabled and `notification_provider` is `postmark`, preflight fails when `POSTMARK_SERVER_TOKEN` or `POSTMARK_FROM_EMAIL` is missing.
-- If the `notifications` add-on is enabled and `notification_provider` is `smtp`, preflight fails when `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, or `SMTP_FROM_EMAIL` is missing.
-- `POSTMARK_FROM_NAME` and `SMTP_FROM_NAME` remain optional and only produce warnings when their provider is enabled.
+Controlled public-site styling is selected through `packageConfig.themePreset`.
 
-## Notifications add-on
+- `bytefix-pro`: tech-forward direction
+- `civic-ledger`: professional service-business direction
 
-- Automated email delivery is packaged as an add-on, not base behavior.
-- Base deployments still create `notification_logs`, but the processor marks them `skipped` when the notifications add-on is not enabled.
-- When the notifications add-on is enabled and the selected provider env values are configured, the app invokes the `process-appointment-notifications` Supabase Edge Function after:
-  - a new appointment request is created
-  - an appointment request is accepted or rejected
-- The Edge Function sends:
-  - admin/business email on new request
-  - customer email on accept/reject
-- The selected provider is controlled by `deployment_config.notification_provider`.
-- Supported providers in the base product are:
-  - `postmark` as the recommended default
-  - `smtp` as a client-owned fallback option
-- Each client deployment is expected to use client-owned provider credentials and cover the provider cost directly.
+## Related Docs
 
-## Deployment
-
-If this project remains linked to Lovable, publish from the Lovable UI. If deployment is moved elsewhere later, update this README with the production host and release flow.
+- `BASE_PRODUCT_DEPLOYMENT_MANUAL.md`
+- `DECISIONS.md`
+- `SESSION_STATE.md`

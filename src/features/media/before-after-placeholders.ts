@@ -77,7 +77,7 @@ const createPlaceholderDataUri = (side: BeforeAfterSide, label: string) => {
       <text x="198" y="166" fill="#f8fafc" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="2">${style.badgeLabel}</text>
       <text x="112" y="290" fill="#f8fafc" font-family="Arial, sans-serif" font-size="52" font-weight="700">${escapeSvgText(firstLine)}</text>
       <text x="112" y="354" fill="#f8fafc" font-family="Arial, sans-serif" font-size="52" font-weight="700">${escapeSvgText(secondLine)}</text>
-      <text x="112" y="462" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="30">ByteFix Pro</text>
+      <text x="112" y="462" fill="#cbd5e1" font-family="Arial, sans-serif" font-size="30">Sample image placeholder</text>
       <circle cx="770" cy="258" r="74" fill="none" stroke="url(#accent)" stroke-width="8" />
       <circle cx="770" cy="258" r="38" fill="url(#accent)" opacity="0.55" />
       <path d="M716 508c34-38 74-60 120-66" fill="none" stroke="url(#accent)" stroke-linecap="round" stroke-width="12" />

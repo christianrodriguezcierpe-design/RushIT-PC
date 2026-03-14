@@ -1,4 +1,4 @@
-export const DEFAULT_SITE_THEME_PRESET = "bytefix-pro";
+export const DEFAULT_SITE_THEME_PRESET = "civic-ledger";
 
 export const SITE_THEME_ATTRIBUTE = "data-site-theme";
 

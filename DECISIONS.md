@@ -1,5 +1,10 @@
 # Decisions Log
 
+## 2026-03-13 - Remove builder-specific scaffolding and keep the base repo standalone
+- Context: The base repo still carried builder-specific metadata, a dev-only tagging plugin, and wrapper Playwright config that were not required for the product runtime or npm-based development flow.
+- Decision: Remove the builder-specific Vite tagger dependency, replace the Playwright wrapper files with standard `@playwright/test` config/exports, rewrite the base docs to read as a standalone reusable product, and keep `npm` as the canonical package manager for this repo.
+- Consequences: The runtime and build behavior stay unchanged, the repo no longer implies an external builder dependency, future Playwright coverage can be added without wrapper packages, and lockfile management stays consistent with the documented npm workflow.
+
 ## 2026-03-11 - Use direct branch pushes against origin
 - Context: The repository was cloned locally to support development before changes are pushed back to GitHub.
 - Decision: Keep `origin` pointed at the provided GitHub repository and create local working branches directly from `main` instead of using a fork.
@@ -73,7 +78,7 @@
 ## 2026-03-13 - Make notifications provider-aware with SMTP as the base-product fallback option
 - Context: The notifications add-on should stay reusable across deployments, but some clients may want to use their own SMTP-capable hosting/email service instead of Postmark.
 - Decision: Keep `postmark` as the recommended default notification provider, add `smtp` as a supported fallback provider in the base product, and select the active provider through `deployment_config.notification_provider` while keeping provider secrets in env vars only.
-- Consequences: Notification delivery stays deterministic per deployment, preflight can validate provider-specific readiness, client-owned SMTP can back the same add-on contract, and provider choice is handled in the base product rather than as a RushIT-only customization.
+- Consequences: Notification delivery stays deterministic per deployment, preflight can validate provider-specific readiness, client-owned SMTP can back the same add-on contract, and provider choice is handled in the base product rather than as deployment-specific one-off customization.
 
 ## 2026-03-13 - Add a controlled theme-preset layer for deployment-specific visual direction
 - Context: Different client deployments need visibly different public-site styling, but free-form design controls would blur the product boundary and create support overhead.
@@ -84,3 +89,13 @@
 - Context: New deployment repos start as copies of the base product, which means they initially inherit product-development docs and session files that do not belong to a client deployment.
 - Decision: Add a `deployment:bootstrap` command that rewrites `README.md`, `DECISIONS.md`, `SESSION_STATE.md`, and `deployment.config.json` for a deployment workspace, updates the package name, and refuses to run against the base product repo itself.
 - Consequences: New client repos can be normalized quickly after creation, deployment docs stay instance-specific, and future deployment setup becomes less error-prone than manual cleanup.
+
+## 2026-03-13 - Keep the reusable deployment process in the base repo and use deployment overlays in client repos
+- Context: The first client deployment showed that combining the reusable deployment process and the client-specific validation notes in the same repo makes ownership unclear and encourages duplicated process docs.
+- Decision: Keep the canonical deployment process in the base product repo, and require each deployment repo to keep only a local overlay covering its deployment profile, UAT sheet, and client-specific sign-off notes.
+- Consequences: The base repo remains the single source of truth for reusable operations, deployment repos stay focused on client-specific execution, and future process changes do not need to be synchronized manually across every deployment repo.
+
+## 2026-03-13 - Keep fallback seed content generic and placeholder promises conservative
+- Context: The generic fallback seed exists to support local development, empty deployments, and pre-infrastructure UI work, but client validation showed that business-specific or overly strong promises in placeholder content create confusion and false assumptions.
+- Decision: Use a generic service-business fallback seed in the base product and keep placeholder content conservative until a real deployment confirms its actual service promises. Normal business-facing copy should be expected to move into deployment content and admin-managed editing, not stay in source code.
+- Consequences: The base product remains reusable across industries, placeholder content is safer to expose during early deployment work, and deployments are validated against managed content rather than hardcoded business copy.
