@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "deploymentName": "RushIT-PC",
+  "businessName": "RushIT PC",
+  "repoUrl": "https://github.com/christianrodriguezcierpe-design/RushIT-PC.git",
+  "baseProductRepoUrl": "https://github.com/christianrodriguezcierpe-design/Dynamic-LndngPg-AdminDashboard-BookingSystem-CnfgLyr.git",
+  "packageTier": "base",
+  "enabledAddOns": [
+    "pricing"
+  ],
+  "themePreset": "bytefix-pro",
+  "notificationProvider": "smtp",
+  "bootstrappedAt": "2026-03-17T20:28:02.300Z"
+}

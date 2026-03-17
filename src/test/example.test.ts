@@ -44,15 +44,10 @@ describe("site runtime", () => {
       "services",
       "pricing",
       "howItWorks",
-      "beforeAfterGallery",
       "reviews",
-      "caseStudies",
-      "team",
-      "leadMagnet",
       "serviceArea",
       "faq",
       "booking",
-      "blogPreview",
     ]);
   });
 
@@ -132,7 +127,7 @@ describe("site runtime", () => {
     expect(quickLinks.some((link) => link.href === "#services")).toBe(true);
     expect(quickLinks.some((link) => link.href === "#pricing")).toBe(true);
     expect(quickLinks.some((link) => link.href === "#booking")).toBe(true);
-    expect(quickLinks.some((link) => link.href === "#blog")).toBe(true);
+    expect(quickLinks.some((link) => link.href === "#blog")).toBe(false);
     expect(quickLinks.some((link) => link.href === "#trust-bar")).toBe(false);
   });
 
@@ -164,7 +159,7 @@ describe("site runtime", () => {
       "skipped",
       "skipped",
     ]);
-    expect(workflowRecords[0].notifications.every((notification) => notification.provider === "postmark")).toBe(true);
+    expect(workflowRecords[0].notifications.every((notification) => notification.provider === "smtp")).toBe(true);
   });
 
   it("persists local business profile edits when Supabase is not configured", async () => {
