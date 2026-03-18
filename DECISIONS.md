@@ -24,3 +24,8 @@
 - Context: The public placeholder content in a first deployment can accidentally imply real operational promises before the business confirms them.
 - Decision: Keep the RushIT-PC placeholder copy practical and editable, without emergency or same-day promises in seed content.
 - Consequences: The public seed is safer for first validation, and any stronger service claims must be added intentionally later through managed content.
+
+## 2026-03-17 - Provisioning prerequisites stay explicit and local
+- Context: RushIT-PC cannot enter live validation until Supabase and SMTP credentials exist, and the current repo owner does not have that infrastructure yet.
+- Decision: Keep a deployment-local provisioning checklist in this repo that lists the exact external values and setup steps still required before live validation.
+- Consequences: The reusable process stays upstream, but the local deployment owner has a concrete checklist for finishing this deployment without guessing what to provision.

@@ -289,12 +289,12 @@ const run = async () => {
       createCheck(
         "notifications-env",
         "fail",
-        "Cannot verify notification readiness because deployment config could not be loaded.",
+        "Cannot verify notification readiness because Supabase service env is incomplete. Deployment config will be checked after Supabase is reachable.",
       ),
       createCheck(
         "notification-function",
         "fail",
-        "Cannot verify notification Edge Function because service env is incomplete.",
+        "Cannot verify notification Edge Function because Supabase service env is incomplete.",
       ),
     );
   } else {
@@ -335,12 +335,12 @@ const run = async () => {
         createCheck(
           "notifications-env",
           "fail",
-          "Cannot verify notification readiness because deployment config could not be loaded.",
+          "Cannot verify notification readiness because Supabase service env is incomplete. Deployment config will be checked after Supabase is reachable.",
         ),
         createCheck(
           "notification-function",
           "fail",
-          "Cannot verify notification Edge Function because deployment config could not be loaded.",
+          "Cannot verify notification Edge Function because deployment_config is not readable yet.",
         ),
       );
     }

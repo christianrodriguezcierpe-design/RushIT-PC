@@ -16,6 +16,16 @@ Use that upstream manual for the generic process. Use this document only for Rus
 - Notification provider default: `smtp`
 - Current active placeholder profile: notifications add-on disabled until the live validation pass enables it intentionally
 
+## Provisioning Prerequisites
+
+Before live validation, complete the external setup in [PROVISIONING_CHECKLIST.md](./PROVISIONING_CHECKLIST.md).
+
+RushIT-PC cannot move into live validation until the deployment has:
+- a dedicated Supabase project
+- browser and service-role env values
+- the notification Edge Function deployed
+- SMTP credentials available for the notification-enabled validation pass
+
 ## RushIT-PC Content Assumptions
 
 The current placeholder content is intentionally editable and conservative.

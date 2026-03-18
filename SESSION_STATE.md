@@ -1,22 +1,22 @@
 # Session State
 
 ## Current Objective
-Validate RushIT-PC as the first real deployment generated from the reusable base product.
+Prepare RushIT-PC for the first real live deployment validation from the clean base-product baseline.
 
 ## Last Completed
-Rebuilt RushIT-PC cleanly from the latest base-product `main`, re-applied the RushIT-PC deployment profile, and restored deployment-specific overlay docs.
+Captured the external provisioning requirements for RushIT-PC, added a local provisioning checklist, and clarified the preflight failure messaging for missing Supabase env.
 
 ## Next Actions
-- Create and connect the dedicated RushIT-PC Supabase project.
-- Configure deployment env values, including the `smtp` notification path.
-- Apply migrations and deploy the notification Edge Function.
-- Run `npm run site:apply-preset` and `npm run site:preflight`.
-- Execute the RushIT-PC live UAT sheet and record any fixes required upstream.
+- Create the dedicated RushIT-PC Supabase project.
+- Fill the Supabase values in the local env file.
+- Apply the migration set and deploy the notification Edge Function.
+- Run `npm run site:apply-preset` and `npm run site:preflight` again.
+- Enable notifications for the validation pass only after SMTP credentials are available.
 
 ## Open Blockers/Risks
-- No live Supabase project is connected yet for this deployment.
-- Notifications are not active in the current placeholder package profile until the live validation pass explicitly enables them.
-- Real SMTP delivery still needs end-to-end validation in the deployment environment.
+- No live Supabase project exists yet for this deployment.
+- No SMTP credentials exist yet for the notification-enabled validation pass.
+- Live UAT cannot start until preflight passes against the real project.
 
 ## Notes
 - Deployment repo: `https://github.com/christianrodriguezcierpe-design/RushIT-PC.git`
@@ -25,3 +25,4 @@ Rebuilt RushIT-PC cleanly from the latest base-product `main`, re-applied the Ru
 - Enabled add-ons: `pricing`
 - Theme preset: `bytefix-pro`
 - Notification provider default: `smtp`
+- Current preflight failure is expected until Supabase env is configured.

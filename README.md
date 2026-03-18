@@ -37,6 +37,7 @@ Still pending:
 
 ## Deployment Overlay Docs
 
+- Provisioning checklist: [PROVISIONING_CHECKLIST.md](./PROVISIONING_CHECKLIST.md)
 - Local overlay and UAT: [DEPLOYMENT_RUNBOOK.md](./DEPLOYMENT_RUNBOOK.md)
 - Local deployment state: [SESSION_STATE.md](./SESSION_STATE.md)
 - Local deployment decisions: [DECISIONS.md](./DECISIONS.md)
